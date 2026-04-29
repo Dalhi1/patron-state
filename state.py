@@ -2,6 +2,7 @@ import tkinter as tk
 from abc import ABC, abstractmethod
 import platform
 
+#sonidos
 def reproducir_sonido(tipo):
     if platform.system() == "Windows":
         import winsound
@@ -30,6 +31,7 @@ class IState(ABC):
     @abstractmethod
     def configurar_botones(self, btn_moneda, btn_retirar, botones_productos): pass
 
+#primer estado SinDinero
 class SinDinero(IState):
     def insertar_moneda(self, context):
         reproducir_sonido("moneda")
@@ -45,6 +47,7 @@ class SinDinero(IState):
         btn_retirar.config(state="disabled", bg="#7F8C8D", text="⬇️ Retirar")
         for btn in botones_productos: btn.config(state="disabled")
 
+#segundo estado ConDinero
 class ConDinero(IState):
     def insertar_moneda(self, context): pass
     
@@ -67,6 +70,7 @@ class ConDinero(IState):
         btn_retirar.config(state="disabled", bg="#7F8C8D", text="⬇️ Retirar")
         for btn in botones_productos: btn.config(state="normal") 
 
+#tercer estado EntregandoProducto
 class EntregandoProducto(IState):
     def insertar_moneda(self, context): pass
     def seleccionar_producto(self, context, producto): pass
@@ -84,6 +88,7 @@ class EntregandoProducto(IState):
         btn_retirar.config(state="normal", bg="#2ECC71", text="⬇️ Retirar de la bandeja") 
         for btn in botones_productos: btn.config(state="disabled")
 
+#cuarto estado SinStock
 class SinStock(IState):
     def insertar_moneda(self, context): pass
     def seleccionar_producto(self, context, producto): pass
@@ -115,6 +120,7 @@ class Context:
 # ui
 context = Context(SinDinero())
 
+#actualizar ui segun el estado
 def actualizar_ui():
     estado_actual = type(context.state).__name__
     
@@ -142,6 +148,7 @@ def retirar_producto():
     context.retirar_producto()
     actualizar_ui()
 
+#visual
 ventana = tk.Tk()
 ventana.title("Máquina Expendedora")
 ventana.geometry("550x450")
